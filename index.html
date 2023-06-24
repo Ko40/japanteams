@@ -40,7 +40,7 @@
         var myTurn = false;
 
         /**
-         * 初期化関数
+         * Initial function
          */
         function init() {
             var b = document.getElementById("board");
@@ -108,10 +108,10 @@
         }
 
         /**
-         * 盤上のセルクリック時のコールバック関数
+         * Call back function when a player clicks a stone
          */
         function clicked(e) {
-            if (!myTurn) {   // PC考え中
+            if (!myTurn) {   // PC thinking
                 return;
             }
             var id = e.target.id;
@@ -129,7 +129,7 @@
         }
 
         /**
-         * (i,j)にcolor色の駒を置く
+         * put a white or black stone on (i,j)
          */
         function put(i, j, color) {
             var c = document.getElementById("cell" + i + j);
@@ -139,7 +139,7 @@
         }
 
         /**
-         * コンピュータ思考関数
+         * AI function
          */
         function think() {
             var highScore = -1000;
@@ -178,7 +178,7 @@
         }
 
         /**
-         * 重みづけ計算
+         * Calculate priorities
          */
         function calcWeightData(tmpData) {
             var score = 0;
@@ -193,7 +193,7 @@
         }
 
         /**
-         * 駒テーブルデータをコピー
+         * Copy data of stones on the board
          */
         function copyData() {
             var tmpData = [];
@@ -207,7 +207,7 @@
         }
 
         /**
-         * 挟める駒があるか？
+         * Check if there is a stone which a player can flip
          */
         function canFlip(color) {
             for (var x = 0 ; x < 8 ; x++) {
@@ -222,14 +222,14 @@
         }
 
         /**
-         * (i,j)に駒をおいたときに駒を挟めるか？
+         * If players can flip a stone when they put a stone on (i,j)
          */
         function getFlipCells(i, j, color) {
             if (data[i][j] == BLACK || data[i][j] == WHITE) {   // 既に駒がある
                 return [];
             }
 
-            // 相手を挟めるか、左上、上、右上、左、右、左下、下、右下と順番に調査
+            // Check if players can flip stones, scan left up, centre up, right up, left, left bottom, centre bottom, bottom right
             var dirs = [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
             var result = [];
             for (var p = 0 ; p < dirs.length ; p++) {
@@ -241,7 +241,7 @@
         }
 
         /**
-         * (i,j)に駒をおいたときに、(dx,dy)方向で駒を挟めるか？
+         * When you put a stone on (i,j) if you can flip stones toward (dx,dy)
          */
         function getFlipCellsOneDir(i, j, dx, dy, color) {
             var x = i + dx;
@@ -250,7 +250,7 @@
 
             if (x < 0 || y < 0 || x > 7 || y > 7 ||
                 data[x][y] == color || data[x][y] == 0) {
-                // 盤外、同色、空ならfalse
+                // outside board, same colour, blank, then it's false
                 return [];
             }
             fliped.push([x, y]);
@@ -259,7 +259,7 @@
                 x += dx;
                 y += dy;
                 if (x < 0 || y < 0 || x > 7 || y > 7 || data[x][y] == 0) {
-                    // 盤外、空ならfalse
+                    // outside or blank, then it's false
                     return [];
                 }
                 if (data[x][y] == color) { // Flipped!
